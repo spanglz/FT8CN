@@ -46,6 +46,7 @@ import com.bg7yoz.ft8cn.connector.CableSerialPort;
 import com.bg7yoz.ft8cn.connector.ConnectMode;
 import com.bg7yoz.ft8cn.connector.FlexConnector;
 import com.bg7yoz.ft8cn.connector.IComWifiConnector;
+import com.bg7yoz.ft8cn.connector.TcpCatConnector;
 import com.bg7yoz.ft8cn.connector.X6100Connector;
 import com.bg7yoz.ft8cn.database.ControlMode;
 import com.bg7yoz.ft8cn.database.DatabaseOpr;
@@ -719,6 +720,24 @@ public class MainViewModel extends ViewModel {
                 setOperationBand();//设置载波频率
             }
         }, 5000);
+    }
+
+    /**
+     * Connect via TCP CAT to ESP32 WiFi bridge (e.g. TX-500).
+     */
+    public void connectTcpCatRig() {
+        GeneralVariables.controlMode = ControlMode.CAT;
+        connectRig();
+        if (baseRig == null) return;
+        baseRig.setControlMode(GeneralVariables.controlMode);
+        TcpCatConnector connector = new TcpCatConnector(
+                GeneralVariables.tcpCatIp,
+                GeneralVariables.tcpCatPort,
+                GeneralVariables.controlMode);
+        baseRig.setOnRigStateChanged(onRigStateChanged);
+        baseRig.setConnector(connector); // setConnector wires up onConnectReceiveData internally
+        connector.connect();
+        new Handler().postDelayed(this::setOperationBand, 2000);
     }
 
     /**

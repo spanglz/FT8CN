@@ -9,6 +9,7 @@ public class ConnectMode {
     public static final int USB_CABLE=0;
     public static final int BLUE_TOOTH=1;
     public static final int NETWORK=2;
+    public static final int TCP_CAT=3;
     public static String getModeStr(int mode){
         switch (mode){
             case  USB_CABLE:
@@ -17,6 +18,8 @@ public class ConnectMode {
                 return "Bluetooth";
             case NETWORK:
                 return "Network";
+            case TCP_CAT:
+                return "WiFi CAT";
             default:
                 return "-";
         }

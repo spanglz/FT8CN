@@ -2152,6 +2152,16 @@ public class DatabaseOpr extends SQLiteOpenHelper {
                 if (name.equalsIgnoreCase("icomPort")) {//Icom端口
                     GeneralVariables.icomUdpPort = result.equals("") ? 50001 : Integer.parseInt(result);
                 }
+                if (name.equalsIgnoreCase("tcpCatIp")) {//WiFi CAT IP
+                    GeneralVariables.tcpCatIp = result.equals("") ? "192.168.4.1" : result;
+                }
+                if (name.equalsIgnoreCase("tcpCatPort")) {//WiFi CAT port
+                    try {
+                        GeneralVariables.tcpCatPort = result.equals("") ? 8899 : Integer.parseInt(result);
+                    } catch (NumberFormatException ignored) {
+                        GeneralVariables.tcpCatPort = 8899;
+                    }
+                }
                 if (name.equalsIgnoreCase("icomUserName")) {//Icom用户名
                     GeneralVariables.icomUserName = result.equals("") ? "ic705" : result;
                 }

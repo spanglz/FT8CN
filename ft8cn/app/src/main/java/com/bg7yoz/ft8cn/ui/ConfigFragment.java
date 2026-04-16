@@ -1281,7 +1281,12 @@ public class ConfigFragment extends Fragment {
             case ConnectMode.NETWORK:
                 binding.networkConnectRadioButton.setChecked(true);
                 break;
+            case ConnectMode.TCP_CAT:
+                binding.tcpCatConnectRadioButton.setChecked(true);
+                break;
         }
+        updateTcpCatLayoutVisibility();
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1290,9 +1295,13 @@ public class ConfigFragment extends Fragment {
                     GeneralVariables.connectMode = ConnectMode.USB_CABLE;
                 } else if (buttonId == binding.bluetoothConnectRadioButton.getId()) {
                     GeneralVariables.connectMode = ConnectMode.BLUE_TOOTH;
-                }else if (buttonId==binding.networkConnectRadioButton.getId()){
-                    GeneralVariables.connectMode=ConnectMode.NETWORK;
+                } else if (buttonId == binding.networkConnectRadioButton.getId()) {
+                    GeneralVariables.connectMode = ConnectMode.NETWORK;
+                } else if (buttonId == binding.tcpCatConnectRadioButton.getId()) {
+                    GeneralVariables.connectMode = ConnectMode.TCP_CAT;
                 }
+                updateTcpCatLayoutVisibility();
+
                 //------显示蓝牙列表，并选择，然后建立蓝牙连接
                 if (GeneralVariables.connectMode == ConnectMode.BLUE_TOOTH) {
                     //根据安卓12，要判断一下蓝牙权限：
@@ -1321,7 +1330,42 @@ public class ConfigFragment extends Fragment {
         binding.cableConnectRadioButton.setOnClickListener(listener);
         binding.bluetoothConnectRadioButton.setOnClickListener(listener);
         binding.networkConnectRadioButton.setOnClickListener(listener);
+        binding.tcpCatConnectRadioButton.setOnClickListener(listener);
+
+        // WiFi CAT fields
+        binding.tcpCatIpEdit.setText(GeneralVariables.tcpCatIp);
+        binding.tcpCatPortEdit.setText(String.valueOf(GeneralVariables.tcpCatPort));
+        binding.tcpCatIpEdit.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            @Override
+            public void afterTextChanged(android.text.Editable editable) {
+                String ip = editable.toString().trim();
+                GeneralVariables.tcpCatIp = ip;
+                writeConfig("tcpCatIp", ip);
+            }
+        });
+        binding.tcpCatPortEdit.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            @Override
+            public void afterTextChanged(android.text.Editable editable) {
+                String portStr = editable.toString().trim();
+                writeConfig("tcpCatPort", portStr);
+                try {
+                    GeneralVariables.tcpCatPort = Integer.parseInt(portStr);
+                } catch (NumberFormatException ignored) {}
+            }
+        });
+        binding.tcpCatConnectButton.setOnClickListener(v -> mainViewModel.connectTcpCatRig());
     }
+
+    private void updateTcpCatLayoutVisibility() {
+        if (GeneralVariables.connectMode == ConnectMode.TCP_CAT) {
+            binding.tcpCatLayout.setVisibility(View.VISIBLE);
+        } else {
+            binding.tcpCatLayout.setVisibility(View.GONE);
+        }
 
 
     /**

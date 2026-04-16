@@ -201,6 +201,10 @@ public class GeneralVariables {
     public static String icomUserName = "ic705";
     public static String icomPassword = "";
 
+    // WiFi CAT (TCP) parameters for ESP32 bridge (e.g. TX-500)
+    public static String tcpCatIp = "192.168.4.1";
+    public static int tcpCatPort = 8899;
+
 
     public static boolean autoFollowCQ = true;//自动关注CQ
     public static boolean autoCallFollow = true;//自动呼叫关注的呼号

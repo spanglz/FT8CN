@@ -1230,6 +1230,15 @@
                                 android:textColor="@color/text_view_color"
                                 android:textSize="12sp" />
 
+                            <RadioButton
+                                android:id="@+id/tcpCatConnectRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="?attr/colorPrimary"
+                                android:text="WiFi CAT"
+                                android:textColor="@color/text_view_color"
+                                android:textSize="12sp" />
+
                         </com.bg7yoz.ft8cn.ui.RadioGroupFt8cn>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1359,6 +1368,79 @@
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tcpCatLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/editor_layout_style"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/serialLayout">
+
+                        <TextView
+                            android:id="@+id/tcpCatLabelText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="WiFi CAT IP"
+                            android:textColor="@color/text_view_color"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/tcpCatIpEdit"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tcpCatIpEdit" />
+
+                        <EditText
+                            android:id="@+id/tcpCatIpEdit"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:hint="192.168.4.1"
+                            android:inputType="text"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/tcpCatLabelText"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tcpCatPortLabelText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Port"
+                            android:textColor="@color/text_view_color"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/tcpCatPortEdit"
+                            app:layout_constraintStart_toEndOf="@+id/tcpCatIpEdit"
+                            app:layout_constraintTop_toTopOf="@+id/tcpCatPortEdit" />
+
+                        <EditText
+                            android:id="@+id/tcpCatPortEdit"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="4dp"
+                            android:hint="8899"
+                            android:inputType="number"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/tcpCatPortLabelText"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:id="@+id/tcpCatConnectButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="Connect"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/tcpCatPortEdit"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/civAddressLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -1366,7 +1448,7 @@
                         android:background="@drawable/editor_layout_style"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/serialLayout">
+                        app:layout_constraintTop_toBottomOf="@+id/tcpCatLayout">
 
 
                         <TextView
