@@ -1366,7 +1366,7 @@ public class ConfigFragment extends Fragment {
         } else {
             binding.tcpCatLayout.setVisibility(View.GONE);
         }
-
+    }
 
     /**
      * 把配置信息写到数据库
