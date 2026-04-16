@@ -726,6 +726,8 @@ public class MainViewModel extends ViewModel {
      * Connect via TCP CAT to ESP32 WiFi bridge (e.g. TX-500).
      */
     public void connectTcpCatRig() {
+        Log.d("TcpCatConnector", "connectTcpCatRig: instructionSet=" + GeneralVariables.instructionSet
+                + " ip=" + GeneralVariables.tcpCatIp + " port=" + GeneralVariables.tcpCatPort);
         GeneralVariables.controlMode = ControlMode.CAT;
         connectRig();
         if (baseRig == null) return;

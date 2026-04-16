@@ -88,7 +88,9 @@ public class TcpCatConnector extends BaseRigConnector {
         sendExecutor.execute(() -> {
             if (outputStream == null) return;
             try {
-                Log.d(TAG, "TX: " + new String(copy));
+                StringBuilder hex = new StringBuilder();
+                for (byte b : copy) hex.append(String.format("%02X ", b));
+                Log.d(TAG, "TX hex: " + hex);
                 outputStream.write(copy);
                 outputStream.flush();
             } catch (IOException e) {
