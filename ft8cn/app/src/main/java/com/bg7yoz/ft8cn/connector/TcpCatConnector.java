@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * WiFi CAT connector for ESP32-based TCP bridge (e.g. TX-500 via ESP32 AP at 192.168.4.1:8899).
@@ -24,6 +26,7 @@ public class TcpCatConnector extends BaseRigConnector {
     private OutputStream outputStream;
     private Thread readThread;
     private volatile boolean running = false;
+    private final ExecutorService sendExecutor = Executors.newSingleThreadExecutor();
 
     public TcpCatConnector(String host, int port, int controlMode) {
         super(controlMode);
@@ -73,20 +76,24 @@ public class TcpCatConnector extends BaseRigConnector {
     @Override
     public void disconnect() {
         running = false;
+        sendExecutor.shutdown();
         closeQuietly();
         getOnConnectorStateChanged().onDisconnected();
     }
 
     @Override
-    public synchronized void sendData(byte[] data) {
-        if (outputStream == null) return;
-        try {
-            outputStream.write(data);
-            outputStream.flush();
-        } catch (IOException e) {
-            Log.e(TAG, "sendData error: " + e.getMessage());
-            getOnConnectorStateChanged().onRunError("TCP send error: " + e.getMessage());
-        }
+    public void sendData(byte[] data) {
+        final byte[] copy = data.clone();
+        sendExecutor.execute(() -> {
+            if (outputStream == null) return;
+            try {
+                outputStream.write(copy);
+                outputStream.flush();
+            } catch (IOException e) {
+                Log.e(TAG, "sendData error: " + e.getMessage());
+                getOnConnectorStateChanged().onRunError("TCP send error: " + e.getMessage());
+            }
+        });
     }
 
     @Override
