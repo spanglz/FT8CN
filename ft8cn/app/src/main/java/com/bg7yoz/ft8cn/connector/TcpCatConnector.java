@@ -54,6 +54,7 @@ public class TcpCatConnector extends BaseRigConnector {
                     if (len > 0 && getOnConnectReceiveData() != null) {
                         byte[] data = new byte[len];
                         System.arraycopy(buf, 0, data, 0, len);
+                        Log.d(TAG, "RX: " + new String(data));
                         getOnConnectReceiveData().onData(data);
                     }
                 }
@@ -87,6 +88,7 @@ public class TcpCatConnector extends BaseRigConnector {
         sendExecutor.execute(() -> {
             if (outputStream == null) return;
             try {
+                Log.d(TAG, "TX: " + new String(copy));
                 outputStream.write(copy);
                 outputStream.flush();
             } catch (IOException e) {
