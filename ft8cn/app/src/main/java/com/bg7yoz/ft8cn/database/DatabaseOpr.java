@@ -2153,13 +2153,13 @@ public class DatabaseOpr extends SQLiteOpenHelper {
                     GeneralVariables.icomUdpPort = result.equals("") ? 50001 : Integer.parseInt(result);
                 }
                 if (name.equalsIgnoreCase("tcpCatIp")) {//WiFi CAT IP
-                    GeneralVariables.tcpCatIp = result.equals("") ? "192.168.4.1" : result;
+                    GeneralVariables.tcpCatIp = result.equals("") ? "cat.local" : result;
                 }
                 if (name.equalsIgnoreCase("tcpCatPort")) {//WiFi CAT port
                     try {
-                        GeneralVariables.tcpCatPort = result.equals("") ? 8899 : Integer.parseInt(result);
+                        GeneralVariables.tcpCatPort = result.equals("") ? 8888 : Integer.parseInt(result);
                     } catch (NumberFormatException ignored) {
-                        GeneralVariables.tcpCatPort = 8899;
+                        GeneralVariables.tcpCatPort = 8888;
                     }
                 }
                 if (name.equalsIgnoreCase("icomUserName")) {//Icom用户名
