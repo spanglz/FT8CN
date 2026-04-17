@@ -96,7 +96,7 @@ public class KenwoodTS2000Rig extends BaseRig {
     @Override
     public void setUsbModeToRig() {
         if (getConnector() != null) {
-            getConnector().sendData(KenwoodTK90RigConstant.setTS590OperationUSBMode());
+            getConnector().sendData(KenwoodTK90RigConstant.setTS2000DigMode());
         }
     }
 
@@ -110,42 +110,26 @@ public class KenwoodTS2000Rig extends BaseRig {
     @Override
     public void onReceiveData(byte[] data) {
         String s = new String(data);
+        buffer.append(s);
+        if (buffer.length() > 1000) clearBufferData();
 
-        if (!s.contains("\r")) {
-            buffer.append(s);
-            if (buffer.length() > 1000) clearBufferData();
-            //return;//说明数据还没接收完。
-        } else {
-            if (s.indexOf("\r") > 0) {//说明接到结束的数据了，并且不是第一个字符是;
-                buffer.append(s.substring(0, s.indexOf("\r")));
-            }
-            //开始分析数据
-            Yaesu3Command yaesu3Command = Yaesu3Command.getCommand(buffer.toString());
-            clearBufferData();//清一下缓存
-            //要把剩下的数据放到缓存里
-            buffer.append(s.substring(s.indexOf("\r") + 1));
+        int idx;
+        while ((idx = buffer.indexOf(";")) >= 0) {
+            String frame = buffer.substring(0, idx);
+            buffer.delete(0, idx + 1);
 
-            if (yaesu3Command == null) {
-                return;
-            }
-            String cmd = yaesu3Command.getCommandID();
-            if (cmd.equalsIgnoreCase("FA")) {//频率
-                long tempFreq = Yaesu3Command.getFrequency(yaesu3Command);
-                if (tempFreq != 0) {//如果tempFreq==0，说明频率不正常
-                    setFreq(Yaesu3Command.getFrequency(yaesu3Command));
-                }
-            } else if (cmd.equalsIgnoreCase("RM")) {//meter
-                if (Yaesu3Command.is590MeterSWR(yaesu3Command)) {
-                    swr = Yaesu3Command.get590ALCOrSWR(yaesu3Command);
-                }
-                if (Yaesu3Command.is590MeterALC(yaesu3Command)) {
-                    alc = Yaesu3Command.get590ALCOrSWR(yaesu3Command);
-                }
+            Yaesu3Command cmd = Yaesu3Command.getCommand(frame);
+            if (cmd == null) continue;
+
+            if (cmd.getCommandID().equalsIgnoreCase("FA")) {
+                long tempFreq = Yaesu3Command.getFrequency(cmd);
+                if (tempFreq != 0) setFreq(tempFreq);
+            } else if (cmd.getCommandID().equalsIgnoreCase("RM")) {
+                if (Yaesu3Command.is590MeterSWR(cmd)) swr = Yaesu3Command.get590ALCOrSWR(cmd);
+                if (Yaesu3Command.is590MeterALC(cmd)) alc = Yaesu3Command.get590ALCOrSWR(cmd);
                 showAlert();
             }
-
         }
-
     }
 
     private void showAlert() {
