@@ -95,9 +95,7 @@ public class KenwoodTS2000Rig extends BaseRig {
 
     @Override
     public void setUsbModeToRig() {
-        if (getConnector() != null) {
-            getConnector().sendData(KenwoodTK90RigConstant.setTS2000DigMode());
-        }
+        // TX-500 does not support mode switching via CAT MD command; mode is set manually on the rig
     }
 
     @Override
