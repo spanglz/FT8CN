@@ -7,8 +7,10 @@ package com.bg7yoz.ft8cn.ft8transmit;
  */
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.util.Log;
 
@@ -396,9 +398,14 @@ public class FT8TransmitSignal {
         Log.d(TAG, String.format("playFT8Signal: 准备声卡播放....位数：%s,采样率：%d"
                 , GeneralVariables.audioOutput32Bit ? "Float32" : "Int16"
                 , GeneralVariables.audioSampleRate));
+        AudioManager audioManager = (AudioManager) GeneralVariables.getMainContext()
+                .getSystemService(Context.AUDIO_SERVICE);
+        boolean btScoActive = audioManager != null && audioManager.isBluetoothScoOn();
         attributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(btScoActive ? AudioAttributes.USAGE_VOICE_COMMUNICATION
+                        : AudioAttributes.USAGE_MEDIA)
+                .setContentType(btScoActive ? AudioAttributes.CONTENT_TYPE_SPEECH
+                        : AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build();
 
         //myFormat = new AudioFormat.Builder().setSampleRate(FT8Common.SAMPLE_RATE)
