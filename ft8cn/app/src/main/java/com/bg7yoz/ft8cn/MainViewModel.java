@@ -389,6 +389,9 @@ public class MainViewModel extends ViewModel {
 
             @Override
             public void onBeforeTransmit(Ft8Message message, int functionOder) {
+                if (GeneralVariables.controlMode == ControlMode.VOX) {
+                    if (needControlSco()) stopSco();
+                }
                 if (GeneralVariables.controlMode == ControlMode.CAT
                         || GeneralVariables.controlMode == ControlMode.RTS
                         || GeneralVariables.controlMode == ControlMode.DTR) {
@@ -407,6 +410,9 @@ public class MainViewModel extends ViewModel {
 
             @Override
             public void onAfterTransmit(Ft8Message message, int functionOder) {
+                if (GeneralVariables.controlMode == ControlMode.VOX) {
+                    if (needControlSco()) startSco();
+                }
                 if (GeneralVariables.controlMode == ControlMode.CAT
                         || GeneralVariables.controlMode == ControlMode.RTS
                         || GeneralVariables.controlMode == ControlMode.DTR) {
